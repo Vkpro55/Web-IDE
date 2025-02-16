@@ -9,7 +9,6 @@ import CodeExplainer from "./components/CodeExplainer";
 import DebugCode from "./components/DebugCode";
 import LoadingAnimation from "./components/LoadingAnimation";
 import Modal from "react-modal"; // Importing react-modal
-import CodeGenerator from "./components/CodeGenerator";
 Modal.setAppElement("#root");
 
 import socket from "./socket";
@@ -43,7 +42,7 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
   const getFileTree = async () => {
-    const response = await fetch("http://localhost:9000/files");
+    const response = await fetch("http://localhost:8000/files");
     const result = await response.json();
     setFileTree(result.tree);
   };
@@ -51,7 +50,7 @@ function App() {
   const getFileContents = useCallback(async () => {
     if (!selectedFile) return;
     const response = await fetch(
-      `http://localhost:9000/files/content?path=${selectedFile}`
+      `http://localhost:8000/files/content?path=${selectedFile}`
     );
     const result = await response.json();
     setSelectedFileContent(result.content);
@@ -184,37 +183,28 @@ function App() {
         <nav className="flex items-center justify-between bg-neutral-800 text-white p-4">
           <div className="flex items-center space-x-4">
             <img
-              src="https://i.ibb.co/R30W19g/Picsart-24-06-01-01-26-43-922.png"
+              src="/logo.png"
               alt="Codeic Logo"
               className="w-12 h-12 mr-2 mb-1"
             />
-            <span className="text-3xl font-bold bg-gradient-to-r from-yellow-500 to-pink-500 text-transparent bg-clip-text ">
-              CodeYantra
+            <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text ">
+              CodeKaro
             </span>
-            {/* <ul className="flex space-x-4">
-              <li className="hover:bg-[#ffffff17] cursor-pointer px-3 py-2 rounded-md text-lg font-md  ">
-                File
-              </li>
-              <li className="hover:bg-[#ffffff17] cursor-pointer px-3 py-2 rounded-md text-lg font-md">
-                Edit
-              </li>
-              <li className="hover:bg-[#ffffff17] cursor-pointer px-3 py-2 rounded-md text-lg font-md">
-                View
-              </li>
-            
-             
-            </ul> */}
           </div>
 
           <div className="flex items-center space-x-4">
-            <CodeGenerator onCodeGenerated={handleCodeGenerated} />
-            <button id="bottone1" onClick={handleDebugOpenModal}>
-              <strong>Debug Code</strong>
+
+            <button
+              id="bottone1"
+              onClick={handleDebugOpenModal}
+              className="hover:animate-pulse font-medium px-3 py-2 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white"
+            >
+              Debug Code
             </button>
 
             <button
               onClick={handleOpenModal}
-              className="hover:brightness-110 hover:animate-pulse font-medium px-3 py-2 rounded-md bg-gradient-to-r from-blue-500 to-pink-500 text-white"
+              className="hover:animate-pulse font-medium px-3 py-2 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white"
             >
               Explain Code
             </button>
@@ -239,69 +229,15 @@ function App() {
               </svg>
               {isCopied ? "Copied" : "Copy Code"}
             </button>
-            <button
-              className={`text-white px-3 py-2 rounded-md focus:outline-none ${
-                isSaved ? "bg-green-500" : "bg-yellow-500"
-              }`}
-            >
-              {isSaved ? "Saved" : "Unsaved"}
-            </button>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-[#ffffff17] text-white px-3 py-2 pr-10 rounded-md focus:outline-none"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute inset-y-0 right-0 px-3 py-2 bg-[#ffffff20] text-white rounded-md focus:outline-none"
-              >
-                {/* Search Icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <circle cx="10" cy="10" r="7" />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 15l5 5"
-                  />
-                </svg>
-              </button>
-            </div>
+
           </div>
         </nav>
-
-        <div className="p-1">
-          {searchResults.length > 0 && (
-            <h2 className="text-xl font-semibold mb-2 ml-4">Search Results</h2>
-          )}
-          <ul>
-            {searchResults.map((result) => (
-              <li
-                key={result}
-                onClick={() => handleFileSelect(`\\${result}`)}
-                className="cursor-pointer hover:text-gray-400  ml-4"
-              >
-                {result}
-              </li>
-            ))}
-          </ul>
-        </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}
           <div
-            className={`${
-              isSidebarOpen ? "block" : "hidden"
-            } lg:block bg-neutral-900 text-white p-4 overflow-y-auto overflow-x-hidden w-72 border-r border-white transition-all duration-300 ease-in-out`}
+            className={`${isSidebarOpen ? "block" : "hidden"
+              } lg:block bg-neutral-900 text-white p-4 overflow-y-auto overflow-x-hidden w-72 border-r border-white transition-all duration-300 ease-in-out`}
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex flex-row">
@@ -355,11 +291,10 @@ function App() {
               {openFiles.map((file) => (
                 <div
                   key={file}
-                  className={`flex items-center cursor-pointer p-2 rounded-t-md ${
-                    selectedFile === file
-                      ? "bg-neutral-700 text-[#c4ff45]"
-                      : "bg-neutral-900 hover:bg-neutral-700"
-                  }`}
+                  className={`flex items-center cursor-pointer p-2 rounded-t-md ${selectedFile === file
+                    ? "bg-neutral-700 text-[#00aaff]"
+                    : "bg-neutral-900 hover:bg-neutral-700"
+                    }`}
                 >
                   <svg
                     className="w-4 h-4 mr-2"
@@ -435,7 +370,7 @@ function App() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       <Modal
         isOpen={isModalOpen}
@@ -459,7 +394,7 @@ function App() {
         </button>
         <DebugCode code={code} onClose={handleDebugCloseModal} />
       </Modal>
-    </div>
+    </div >
   );
 }
 

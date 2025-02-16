@@ -20,10 +20,12 @@ const Terminal = () => {
     term.open(terminalRef.current);
 
     term.onData((data) => {
+      console.log(data);
       socket.emit("terminal:write", data);
     });
 
     function onTerminalData(data) {
+      console.log(data);
       term.write(data);
     }
 

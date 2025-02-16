@@ -17,19 +17,17 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path, selectedFile }) => {
           handleToggle();
           if (!isDir) onSelect(path);
         }}
-        className={`flex items-center cursor-pointer ${
-          isDir
-            ? "text-[#d4d4d4]"
-            : isSelected
-            ? "bg-[#c4ff45] text-black font-semibold p-1 rounded-md mr-5"
-            : "text-white hover:text-[#c4ff45]"
-        }`}
+        className={`flex items-center cursor-pointer ${isDir
+          ? "text-[#d4d4d4]"
+          : isSelected
+            ? "bg-[#00aaff] text-black font-semibold p-1 rounded-md mr-5"
+            : "text-white hover:text-[#00aaff]"
+          }`}
       >
         {isDir ? (
           <svg
-            className={`w-4 h-4 mr-2 transform transition-transform ${
-              isOpen ? "rotate-90" : ""
-            }`}
+            className={`w-4 h-4 mr-2 transform transition-transform ${isOpen ? "rotate-90" : ""
+              }`}
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"

@@ -1,10 +1,8 @@
-//sample app 
-const express = require('express')
+const express = require('express');
+const dotenv = require('dotenv');
 
-const PORT = 8000
+const app = express();
 
-const app = express()
-
-app.get('/', (req, res) => res.json({ msg: 'Express Server Setup.' }));
-
-app.listen(PORT, () => console.log(`Say hello to server on Port : ${PORT}`))
+app.listen(3000, () => {
+    console.log('Server started');
+})
